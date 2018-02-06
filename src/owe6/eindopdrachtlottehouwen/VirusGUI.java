@@ -302,13 +302,16 @@ public class VirusGUI extends JFrame implements ActionListener {
             System.out.println(hostid1);
             System.out.println(hostid2);
             
-            HashSet virussen1 = VirusLogica.ReturnVirusLijst1(hostid1, maphostnaarvirussen);
-            System.out.println(virussen1);
+            HashSet virussenid1 = VirusLogica.ReturnVirusIDLijst1(hostid1, maphostnaarvirussen, viruslijst1area);
+            System.out.println(virussenid1);
             
-            HashSet virussen2 = VirusLogica.ReturnVirusLijst2(hostid2, maphostnaarvirussen);
-            System.out.println(virussen2);
+            HashSet virussenid2 = VirusLogica.ReturnVirusIDLijst2(hostid2, maphostnaarvirussen, viruslijst2area);
+            System.out.println(virussenid2);
             //viruslijst1area.set
            
+            String vergelijkvirusid = VirusLogica.ReturnVirusIDOvereenkomst(virussenid1, virussenid2, vergelijkarea);
+            System.out.println(vergelijkarea);
+           //Hashset vergelijkvirussenid
 
         }
         
