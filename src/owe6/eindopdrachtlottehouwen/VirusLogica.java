@@ -10,8 +10,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
+import javax.swing.JTextArea;
 
 /**
  *
@@ -49,27 +52,40 @@ public class VirusLogica {
         return hostid2;
     }
 
-    public static HashSet ReturnVirusLijst1(String hostid1, HashMap<String, HashSet<String>> maphostnaarvirussen) {
+    public static HashSet ReturnVirusIDLijst1(String hostid1, HashMap<String, HashSet<String>> maphostnaarvirussen, JTextArea viruslijst1area) {
 
         HashSet<String> virussen1 = new HashSet<>();
         if (maphostnaarvirussen.containsKey(hostid1)) {
             virussen1 = maphostnaarvirussen.get(hostid1);
-            //System.out.println(hosts);
+              String virussen1lijst = virussen1.toString();
+                    viruslijst1area.setText(virussen1lijst);
         }
-       
+
         //Collections.sort(virussen1);
         return virussen1;
     }
 
-    public static HashSet ReturnVirusLijst2(String hostid2, HashMap<String, HashSet<String>> maphostnaarvirussen) {
+    public static HashSet ReturnVirusIDLijst2(String hostid2, HashMap<String, HashSet<String>> maphostnaarvirussen, JTextArea viruslijst2area) {
 
         HashSet<String> virussen2 = new HashSet<>();
         if (maphostnaarvirussen.containsKey(hostid2)) {
             virussen2 = maphostnaarvirussen.get(hostid2);
             //System.out.println(hosts);
+            String virussen2lijst = virussen2.toString();
+                    viruslijst2area.setText(virussen2lijst);
         }
-       
+
         //Collections.sort(virussen1);
         return virussen2;
+    }
+
+    public static String ReturnVirusIDOvereenkomst(HashSet virussenid1, HashSet virussenid2, JTextArea vergelijkarea)
+
+    {
+        Set vergelijkvirussenid = new TreeSet(virussenid1);
+                    vergelijkvirussenid.retainAll(virussenid2);
+                    String vergelijkidvirussen = vergelijkvirussenid.toString();
+                    vergelijkarea.setText(vergelijkidvirussen);
+        return vergelijkidvirussen;
     }
 }
