@@ -60,7 +60,7 @@ public class VirusGUI extends JFrame implements ActionListener {
     JRadioButton r2;
     JRadioButton r3;
     
-    //hostlijsten
+    //viruslijsten
     JTextArea viruslijst1area;
     JLabel viruslijst1label;
     JTextArea viruslijst2area;
@@ -77,6 +77,7 @@ public class VirusGUI extends JFrame implements ActionListener {
     String[] lijn;
     ArrayList<Object> virusclasse_lijst = new ArrayList<>();
     HashMap<String, HashSet<String>> mapclassenaarhost = new HashMap<>();
+    HashMap<String, HashSet<String>> maphostnaarvirussen = new HashMap<>();
 
     public static void main(String[] args) {
         VirusGUI frame = new VirusGUI();
@@ -225,6 +226,16 @@ public class VirusGUI extends JFrame implements ActionListener {
                             mapclassenaarhost.get(lijn[2]).add(host);
                         }
 
+                        HashSet<String> virusset = new HashSet<>();          
+                        String virus = lijn[0];
+                        hostset.add(virus);
+                        if (!maphostnaarvirussen.containsKey(lijn[7])) {
+
+                            maphostnaarvirussen.put(lijn[7], virusset);
+                        } else {
+                            maphostnaarvirussen.get(lijn[7]).add(virus);
+                        }
+                        
                         if (lijn[0] != null) {
                             virusid_lijst.add(lijn[0]);
                         } else {
@@ -286,11 +297,18 @@ public class VirusGUI extends JFrame implements ActionListener {
         }
 
         if (event.getSource() == r1) {
-            VirusLogica.ReturnVirusLijst1(hostidbox1);
-            VirusLogica.ReturnVirusLijst2(hostidbox2);
-                    
-            System.out.println(VirusLogica.ReturnVirusLijst1);
+            String hostid1 = VirusLogica.ReturnHost1(hostidbox1);
+            String hostid2 = VirusLogica.ReturnHost2(hostidbox2);
+            System.out.println(hostid1);
+            System.out.println(hostid2);
             
+            HashSet virussen1 = VirusLogica.ReturnVirusLijst1(hostid1, maphostnaarvirussen);
+            System.out.println(virussen1);
+            
+            HashSet virussen2 = VirusLogica.ReturnVirusLijst2(hostid2, maphostnaarvirussen);
+            System.out.println(virussen2);
+            //viruslijst1area.set
+           
 
         }
         
