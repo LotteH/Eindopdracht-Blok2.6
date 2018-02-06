@@ -39,34 +39,44 @@ public class VirusGUI extends JFrame implements ActionListener {
     JTextField bestandveld;
     JButton bladerbutton;
 
-    // classificatie
+    // classificatiedropdown
     JLabel classificatielabel;
     String[] classificatiecomboopties = {""};
     JComboBox classificatiebox;
     JButton classificatiebutton;
 
-    //virusvergelijk 
+    //hostdropdown 
     JLabel hostidlabelvirus1;
-    String[] hostidcomboopties1 = {"1", "sdlfkjsdlfjsldkfjl"};
+    String[] hostidcomboopties1 = {""};
     JComboBox hostidbox1;
+    JLabel hostidlabelvirus2;
+    String[] hostidcomboopties2 = {""};
+    JComboBox hostidbox2;
+    
+    //sorteeropties
+    JLabel radiovergelijklabel;
+    ButtonGroup buttongroep;
+    JRadioButton r1; 
+    JRadioButton r2;
+    JRadioButton r3;
+    
+    //hostlijsten
     JTextArea viruslijst1area;
     JLabel viruslijst1label;
-
-    JLabel hostidlabelvirus2;
-    String[] hostidcomboopties2 = {"lksadjalsjd", "nogmezsnljasdljkropties"};
-    JComboBox hostidbox2;
     JTextArea viruslijst2area;
     JLabel viruslijst2label;
 
     //sorteeropties & output
-    JLabel radiovergelijklabel;
+    
     JTextArea vergelijkarea;
     JLabel vergelijklabel;
 
+    //overig
     JFileChooser filechooser;
     private static BufferedReader filelezer;
     String[] lijn;
     ArrayList<Object> virusclasse_lijst = new ArrayList<>();
+    HashMap<String, HashSet<String>> mapclassenaarhost = new HashMap<>();
 
     public static void main(String[] args) {
         VirusGUI frame = new VirusGUI();
@@ -97,54 +107,71 @@ public class VirusGUI extends JFrame implements ActionListener {
         classificatiebox = new JComboBox(classificatiecomboopties);
         classificatiebox.setPreferredSize(new Dimension(710, 25));
         window.add(classificatiebox);
-        classificatiebutton = new JButton("    Selecteer    ");
+        classificatiebutton = new JButton(" Kies Klasse ");
         classificatiebutton.addActionListener(this);
         window.add(classificatiebutton);
 
         // Virussen vergelijken
         hostidlabelvirus1 = new JLabel("Host ID Virus 1");
-        hostidlabelvirus1.setPreferredSize(new Dimension(470, 25));
+        hostidlabelvirus1.setPreferredSize(new Dimension(450, 25));
         window.add(hostidlabelvirus1);
 
         hostidlabelvirus2 = new JLabel("Host ID Virus 2");
-        hostidlabelvirus2.setPreferredSize(new Dimension(470, 25));
+        hostidlabelvirus2.setPreferredSize(new Dimension(450, 25));
         window.add(hostidlabelvirus2);
         bestandlabel.setVisible(true);
 
         hostidbox1 = new JComboBox(hostidcomboopties1);
-        hostidbox1.setPreferredSize(new Dimension(470, 25));
+        hostidbox1.setPreferredSize(new Dimension(450, 25));
         window.add(hostidbox1);
 
         hostidbox2 = new JComboBox(hostidcomboopties2);
-        hostidbox2.setPreferredSize(new Dimension(470, 25));
+        hostidbox2.setPreferredSize(new Dimension(450, 25));
         window.add(hostidbox2);
 
+//        hostidbutton = new JButton("Selecteer");
+  //      hostidbutton.addActionListener(this);
+    //    window.add(hostidbutton);
+
         viruslijst1label = new JLabel("Viruslijst Virus 2");
-        viruslijst1label.setPreferredSize(new Dimension(470, 100));
-        viruslijst1area = new JTextArea();
-        viruslijst1area.setPreferredSize(new Dimension(470, 150));
-        //informatiegebied.addActionListener(this);
-        window.add(viruslijst1area);
-
-        viruslijst2label = new JLabel("Viruslijst Virus 2");
-        viruslijst2label.setPreferredSize(new Dimension(470, 100));
-
-        viruslijst2area = new JTextArea();
-        viruslijst2area.setPreferredSize(new Dimension(470, 150));
-        //informatiegebied.addActionListener(this);
-        window.add(viruslijst2area);
-
+        viruslijst1label.setPreferredSize(new Dimension(450, 100));
+        
         // Kies opties
         radiovergelijklabel = new JLabel("Kies een sorteeroptie:     ");
         window.add(radiovergelijklabel);
 
-        JRadioButton r1 = new JRadioButton("ID");
-        JRadioButton r2 = new JRadioButton("Classificatie");
-        JRadioButton r3 = new JRadioButton("Aantal Hosts");
-
+        r1 = new JRadioButton("ID");
+        r1.addActionListener(this);
+        r2 = new JRadioButton("Classificatie");
+        r2.addActionListener(this);
+        r3 = new JRadioButton("Aantal Hosts                                                                                                                                                                                ");
+        r3.addActionListener(this);
+        
         window.add(r1);
         window.add(r2);
         window.add(r3);
+        
+        buttongroep = new ButtonGroup();
+        buttongroep.add(r1);
+        buttongroep.add(r2);
+        buttongroep.add(r3);
+        
+       //buttongroep.setPreferredSize(new Dimension(450, 150));
+        
+        viruslijst1area = new JTextArea();
+        viruslijst1area.setPreferredSize(new Dimension(450, 150));
+        //informatiegebied.addActionListener(this);
+        window.add(viruslijst1area);
+
+        viruslijst2label = new JLabel("Viruslijst Virus 2");
+        viruslijst2label.setPreferredSize(new Dimension(450, 100));
+
+        viruslijst2area = new JTextArea();
+        viruslijst2area.setPreferredSize(new Dimension(450, 150));
+        //informatiegebied.addActionListener(this);
+        window.add(viruslijst2area);
+
+      
 
         vergelijklabel = new JLabel("                                                            Overeenkomend tussen Virus 1 en Virus 2                                                            ");
         window.add(vergelijklabel);
@@ -161,7 +188,7 @@ public class VirusGUI extends JFrame implements ActionListener {
         String bestand;
 
         if (event.getSource() == bladerbutton) {
-            
+
             filechooser = new JFileChooser();
             reply = filechooser.showOpenDialog(this);
             if (reply == JFileChooser.APPROVE_OPTION) {
@@ -179,23 +206,25 @@ public class VirusGUI extends JFrame implements ActionListener {
 
                 ArrayList<Object> virusid_lijst = new ArrayList<>();
                 ArrayList<Object> virusnaam_lijst = new ArrayList<>();
-                //ArrayList<Object> virusclasse_lijst = new ArrayList<>();
                 ArrayList<Object> hostid_lijst = new ArrayList<>();
                 ArrayList<Object> hostnaam_lijst = new ArrayList<>();
 
                 Set<String> uniekevirusclasseset = new HashSet<>();
-                
-                HashMap<String, String> mapclassenaarhost = new HashMap<String, String>();
-                
-                
+
                 try {
                     while ((line = filelezer.readLine()) != null) {
                         lijn = line.split("\t", -1);                // hulp Jonathan Feenstra
-                        
-                        mapclassenaarhost.put(lijn[2], lijn[7]);
-                        //System.out.println("hoi");
-                        
-                        
+
+                        HashSet<String> hostset = new HashSet<>();          // hulp Jonathan Feenstra
+                        String host = lijn[7] + " (" + lijn[8] + ")";
+                        hostset.add(host);
+                        if (!mapclassenaarhost.containsKey(lijn[2])) {
+
+                            mapclassenaarhost.put(lijn[2], hostset);
+                        } else {
+                            mapclassenaarhost.get(lijn[2]).add(host);
+                        }
+
                         if (lijn[0] != null) {
                             virusid_lijst.add(lijn[0]);
                         } else {
@@ -232,46 +261,38 @@ public class VirusGUI extends JFrame implements ActionListener {
                             uniekevirusclasseset.add(" ");
                         }
 
- 
                     }
                 } catch (IOException ex) {
                     Logger.getLogger(VirusGUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                 Set set = mapclassenaarhost.entrySet();
-      Iterator iterator = set.iterator();
-      while(iterator.hasNext()) {
-         Map.Entry mentry = (Map.Entry)iterator.next();
-         System.out.print("key is: "+ mentry.getKey() + " & Value is: ");
-         System.out.println(mentry.getValue());
-      }
-                System.out.println("hoiii"+mapclassenaarhost.values());
+
                 //System.out.println(virusid_lijst.size());
                 //System.out.println(virusnaam_lijst.size());
                 //System.out.println(virusclasse_lijst);
                 //System.out.println(hostid_lijst.size());
                 //System.out.println(hostnaam_lijst.size());
                 //System.out.println(uniekevirusclasseset);
-
                 ArrayList<String> uniekevirusclasselijst = new ArrayList<>(uniekevirusclasseset);
 
-               // System.out.println(uniekevirusclasselijst);
+                System.out.println(uniekevirusclasselijst);
                 for (int i = 1; i < uniekevirusclasselijst.size(); i++) {
                     classificatiebox.addItem(uniekevirusclasselijst.get(i));
                 }
             }
         }
 
-        
         if (event.getSource() == classificatiebutton) {
-            String item = classificatiebox.getSelectedItem().toString();
-            int i = VirusLogica.ReturnHostID(virusclasse_lijst, item);
-            System.out.println(i);
-            
-
-
-                
-            
+            VirusLogica.ReturnHostIDOptions(classificatiebox, mapclassenaarhost, hostidbox1, hostidbox2);
         }
+
+        if (event.getSource() == r1) {
+            VirusLogica.ReturnVirusLijst1(hostidbox1);
+            VirusLogica.ReturnVirusLijst2(hostidbox2);
+                    
+            System.out.println(VirusLogica.ReturnVirusLijst1);
+            
+
+        }
+        
     }
 }
-
