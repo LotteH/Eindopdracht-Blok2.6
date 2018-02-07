@@ -52,14 +52,14 @@ public class VirusGUI extends JFrame implements ActionListener {
     JLabel hostidlabelvirus2;
     String[] hostidcomboopties2 = {""};
     JComboBox hostidbox2;
-    
+
     //sorteeropties
     JLabel radiovergelijklabel;
     ButtonGroup buttongroep;
-    JRadioButton r1; 
+    JRadioButton r1;
     JRadioButton r2;
     JRadioButton r3;
-    
+
     //viruslijsten
     JTextArea viruslijst1area;
     JLabel viruslijst1label;
@@ -67,7 +67,6 @@ public class VirusGUI extends JFrame implements ActionListener {
     JLabel viruslijst2label;
 
     //sorteeropties & output
-    
     JTextArea vergelijkarea;
     JLabel vergelijklabel;
 
@@ -78,6 +77,8 @@ public class VirusGUI extends JFrame implements ActionListener {
     ArrayList<Object> virusclasse_lijst = new ArrayList<>();
     HashMap<String, HashSet<String>> mapclassenaarhost = new HashMap<>();
     HashMap<String, HashSet<String>> maphostnaarvirussen = new HashMap<>();
+   // Set<String> uniekevirusclasseset = new HashSet<>();
+   // ArrayList<String> uniekevirusclasselijst = new ArrayList<>(uniekevirusclasseset);
 
     public static void main(String[] args) {
         VirusGUI frame = new VirusGUI();
@@ -131,12 +132,11 @@ public class VirusGUI extends JFrame implements ActionListener {
         window.add(hostidbox2);
 
 //        hostidbutton = new JButton("Selecteer");
-  //      hostidbutton.addActionListener(this);
-    //    window.add(hostidbutton);
-
+        //      hostidbutton.addActionListener(this);
+        //    window.add(hostidbutton);
         viruslijst1label = new JLabel("Viruslijst Virus 2");
         viruslijst1label.setPreferredSize(new Dimension(450, 100));
-        
+
         // Kies opties
         radiovergelijklabel = new JLabel("Kies een sorteeroptie:     ");
         window.add(radiovergelijklabel);
@@ -147,18 +147,17 @@ public class VirusGUI extends JFrame implements ActionListener {
         r2.addActionListener(this);
         r3 = new JRadioButton("Aantal Hosts                                                                                                                                                                                ");
         r3.addActionListener(this);
-        
+
         window.add(r1);
         window.add(r2);
         window.add(r3);
-        
+
         buttongroep = new ButtonGroup();
         buttongroep.add(r1);
         buttongroep.add(r2);
         buttongroep.add(r3);
-        
-       //buttongroep.setPreferredSize(new Dimension(450, 150));
-        
+
+        //buttongroep.setPreferredSize(new Dimension(450, 150));
         viruslijst1area = new JTextArea();
         viruslijst1area.setPreferredSize(new Dimension(450, 150));
         //informatiegebied.addActionListener(this);
@@ -171,8 +170,6 @@ public class VirusGUI extends JFrame implements ActionListener {
         viruslijst2area.setPreferredSize(new Dimension(450, 150));
         //informatiegebied.addActionListener(this);
         window.add(viruslijst2area);
-
-      
 
         vergelijklabel = new JLabel("                                                            Overeenkomend tussen Virus 1 en Virus 2                                                            ");
         window.add(vergelijklabel);
@@ -226,7 +223,7 @@ public class VirusGUI extends JFrame implements ActionListener {
                             mapclassenaarhost.get(lijn[2]).add(host);
                         }
 
-                        HashSet<String> virusset = new HashSet<>();          
+                        HashSet<String> virusset = new HashSet<>();
                         String virus = lijn[0];
                         hostset.add(virus);
                         if (!maphostnaarvirussen.containsKey(lijn[7])) {
@@ -235,7 +232,7 @@ public class VirusGUI extends JFrame implements ActionListener {
                         } else {
                             maphostnaarvirussen.get(lijn[7]).add(virus);
                         }
-                        
+
                         if (lijn[0] != null) {
                             virusid_lijst.add(lijn[0]);
                         } else {
@@ -299,21 +296,28 @@ public class VirusGUI extends JFrame implements ActionListener {
         if (event.getSource() == r1) {
             String hostid1 = VirusLogica.ReturnHost1(hostidbox1);
             String hostid2 = VirusLogica.ReturnHost2(hostidbox2);
-            System.out.println(hostid1);
-            System.out.println(hostid2);
-            
+          
             HashSet virussenid1 = VirusLogica.ReturnVirusIDLijst1(hostid1, maphostnaarvirussen, viruslijst1area);
-            System.out.println(virussenid1);
-            
             HashSet virussenid2 = VirusLogica.ReturnVirusIDLijst2(hostid2, maphostnaarvirussen, viruslijst2area);
-            System.out.println(virussenid2);
-            //viruslijst1area.set
-           
-            String vergelijkvirusid = VirusLogica.ReturnVirusIDOvereenkomst(virussenid1, virussenid2, vergelijkarea);
-            System.out.println(vergelijkarea);
-           //Hashset vergelijkvirussenid
+
+            VirusLogica.ReturnVirusIDOvereenkomst(virussenid1, virussenid2, vergelijkarea);
 
         }
-        
+
+        if (event.getSource() == r2) {
+            String hostid1 = VirusLogica.ReturnHost1(hostidbox1);
+            String hostid2 = VirusLogica.ReturnHost2(hostidbox2);
+            
+            HashSet virussenclasse1 = VirusLogica.ReturnVirusClasseLijst1(hostid1, classificatiebox, viruslijst1area);
+            HashSet virussenclasse2 = VirusLogica.ReturnVirusClasseLijst1(hostid1, classificatiebox, viruslijst2area);
+
+            VirusLogica.ReturnVirusClasseOvereenkomst(virussenclasse1, virussenclasse2, vergelijkarea);
+        }
+       // if (event.getSource() == r3){
+       //     String hostid1 = VirusLogica.ReturnHost1(hostidbox1);
+       //     String hostid2 = VirusLogica.ReturnHost2(hostidbox2);}
+            
+            
+        //}
     }
 }

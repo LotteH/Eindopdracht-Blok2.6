@@ -79,13 +79,42 @@ public class VirusLogica {
         return virussen2;
     }
 
-    public static String ReturnVirusIDOvereenkomst(HashSet virussenid1, HashSet virussenid2, JTextArea vergelijkarea)
-
-    {
+    public static void ReturnVirusIDOvereenkomst(HashSet virussenid1, HashSet virussenid2, JTextArea vergelijkarea)    {
         Set vergelijkvirussenid = new TreeSet(virussenid1);
                     vergelijkvirussenid.retainAll(virussenid2);
                     String vergelijkidvirussen = vergelijkvirussenid.toString();
                     vergelijkarea.setText(vergelijkidvirussen);
-        return vergelijkidvirussen;
     }
+
+    public static HashSet ReturnVirusClasseLijst1(String hostid1, JComboBox classificatiebox, JTextArea viruslijst1area) {
+        String virusclasseitem1 = classificatiebox.getSelectedItem().toString();
+        viruslijst1area.setText(virusclasseitem1);
+        
+        HashSet<String> virusclasse1 = new HashSet<>();
+        virusclasse1.add(virusclasseitem1);
+
+        return virusclasse1;
+    }
+        
+    public static HashSet ReturnVirusClasseLijst2(String hostid2, JComboBox classificatiebox, JTextArea viruslijst2area) {
+        String virusclasseitem2 = classificatiebox.getSelectedItem().toString();
+        viruslijst2area.setText(virusclasseitem2);
+        
+        HashSet<String> virusclasse2 = new HashSet<>();
+        virusclasse2.add(virusclasseitem2);
+
+        return virusclasse2;
+        
+    }
+    
+    public static void ReturnVirusClasseOvereenkomst(HashSet virussenclasse1, HashSet virussenclasse2, JTextArea vergelijkarea){
+            Set vergelijkvirussenclasse = new TreeSet(virussenclasse1);
+                    vergelijkvirussenclasse.retainAll(virussenclasse2);
+                    String vergelijkclassevirussen = vergelijkvirussenclasse.toString();
+                    vergelijkarea.setText(vergelijkclassevirussen);
+       
 }
+
+    
+}
+
