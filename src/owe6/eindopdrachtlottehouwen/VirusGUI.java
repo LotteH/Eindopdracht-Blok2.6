@@ -32,6 +32,30 @@ import java.util.*;
 import java.util.regex.Pattern;
 import javax.swing.*;
 
+/**
+ *Class waarin virusobjecten worden gemaakt. getters en setters komen hier tot stand.
+ * Nog geen informatie opgehaald uit bestand met deze class en getters. Wordt nog aan gewerkt.
+ * @author lotte
+ * @version 1.00
+ * @since 07-02-2018 (7 feb. 2018)
+ * 
+ * Praktische gegevens:
+ * Student: Lotte Houwen
+ * Studentnummer: 542221
+ * Klas: Bin2c
+ * Opleiding: Bioinformatica aan Hogeschool Arnhem en Nijmegen (HAN)
+ * 
+ * Opmerkingen:
+ * Met deze code heb ik af en toe samengewerkt met andere studenten. Ook hebben we een middag bij elkaar gezeten.
+ * Code kan dus soms overeenkomen. Soms hebben andere studenten mij geholpen/overlegd met een klein stukje.
+ * Als het goed is staat er in het commentaar dan bij wie dit gedaan heeft.
+ * Studenten met wie ik het meest overlegt heb of in diens aanwezigheid aan mijn code gewerkt heb zijn: 
+ * Jonathan Feenstra, Nicky van Bergen, Justin Huberts, Thijs Weenink en in mindere mate Alex Janse en Damian Bolwerk.
+ */
+
+/**
+ * Class om het bestand aan te roepen, data eruit te filteren en actionlistener voor bepaalde buttons.
+ */
 public class VirusGUI extends JFrame implements ActionListener {
 
     // bestand zoeken
@@ -79,8 +103,7 @@ public class VirusGUI extends JFrame implements ActionListener {
     HashMap<String, HashSet<String>> mapvirusidnaarhost = new HashMap<>();
 
     /**
-     *
-     * @param args
+     *Maakt GUI frame aan.
      */
     public static void main(String[] args) {
         VirusGUI frame = new VirusGUI();
@@ -90,6 +113,9 @@ public class VirusGUI extends JFrame implements ActionListener {
         frame.show();
     }
 
+    /**
+     *Creeërt inhoud van GUI
+     */
     public void createGUI() {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         Container window = getContentPane();
@@ -169,13 +195,18 @@ public class VirusGUI extends JFrame implements ActionListener {
         vergelijkarea.setPreferredSize(new Dimension(940, 150));
         window.add(vergelijkarea);
     }
-
+/**
+ * Methode die acties uitvoerd na activatie van bepaalde knop/list/button.
+ * Daarnaast filtert het data uit het bestand. In toekomst moet dit nog in eigen methodes.
+ */
     @Override
     public void actionPerformed(ActionEvent event) {
         File selectedFile;
         int reply;
         String bestand;
-
+/**
+ *  Met Bladerbutton kan er een bestand gekozen worden. Deze wordt gelezen en juiste data wordt eruit gefilterd.
+ */
         if (event.getSource() == bladerbutton) {
 
             
@@ -264,12 +295,16 @@ public class VirusGUI extends JFrame implements ActionListener {
                 }
             }
         }
-
+/**
+ *  Met classificatiebutton kan er een virusclassificatie gekozen worden. Deze vult hostid dropdowns.
+ */
         if (event.getSource() == classificatiebutton) {
             VirusLogica.returnHostIDOptions(classificatiebox, mapclassenaarhost, hostidbox1, hostidbox2);
 
         }
-
+/**
+ *  Hiermee kan er een gesorteerd worden op virusid.
+ */
         if (event.getSource() == radio1) {
             
             String hostid1 = VirusLogica.returnHost1(hostidbox1);
@@ -281,7 +316,9 @@ public class VirusGUI extends JFrame implements ActionListener {
             VirusLogica.returnVirusIDOvereenkomst(virussenid1, virussenid2, vergelijkarea);
 
         }
-
+/**
+ *  Hiermee kan er gesorteerd worden op het aantal keer dat een host voorkomt bij diverse virussen. Werkt nog niet naar behoren.
+ */
         if (event.getSource() == radio2) {
             
             String hostid1 = VirusLogica.returnHost1(hostidbox1);
@@ -295,7 +332,9 @@ public class VirusGUI extends JFrame implements ActionListener {
 
             VirusLogica.returnVirusIDOvereenkomst(virussenid1, virussenid2, vergelijkarea);
 
-
+/**
+Er is bewust gekozen voor 2 radiobuttons in plaats van 3. De classificatiesorteerder zou telkens maar dezelfde klasse teruggeven waardoor sorteren overbodig is.
+Dit komt door de manier waarop de hostiddropdowns gevult worden naar aanleiding van de classificatie die is aangevinkt.*/
         }
 
     }
