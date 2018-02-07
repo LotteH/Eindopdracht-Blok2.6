@@ -16,13 +16,9 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JTextArea;
 
-/**
- *
- * @author lotte
- */
 public class VirusLogica {
 
-    public static void ReturnHostIDOptions(JComboBox classificatiebox, HashMap<String, HashSet<String>> mapclassenaarhost, JComboBox hostidbox1, JComboBox hostidbox2) {           // Hulp Thijs Weenink
+    public static void returnHostIDOptions(JComboBox classificatiebox, HashMap<String, HashSet<String>> mapclassenaarhost, JComboBox hostidbox1, JComboBox hostidbox2) {           // Hulp Thijs Weenink
         HashSet<String> hosts = new HashSet<>();
         if (mapclassenaarhost.containsKey(classificatiebox.getSelectedItem().toString())) {
             hosts = mapclassenaarhost.get(classificatiebox.getSelectedItem().toString());
@@ -36,7 +32,7 @@ public class VirusLogica {
 
     }
 
-    public static String ReturnHost1(JComboBox hostidbox1) {
+    public static String returnHost1(JComboBox hostidbox1) {
 
         String host1 = hostidbox1.getSelectedItem().toString();
         String[] hostidsplitter1 = host1.split(" ");
@@ -44,7 +40,7 @@ public class VirusLogica {
         return hostid1;
     }
 
-    public static String ReturnHost2(JComboBox hostidbox2) {
+    public static String returnHost2(JComboBox hostidbox2) {
 
         String host2 = hostidbox2.getSelectedItem().toString();
         String[] hostidsplitter1 = host2.split(" ");
@@ -52,69 +48,74 @@ public class VirusLogica {
         return hostid2;
     }
 
-    public static HashSet ReturnVirusIDLijst1(String hostid1, HashMap<String, HashSet<String>> maphostnaarvirussen, JTextArea viruslijst1area) {
+    public static HashSet returnVirusIDLijst1(String hostid1, HashMap<String, HashSet<String>> maphostnaarvirussen, JTextArea viruslijst1area) {
+        viruslijst1area.setText("");
 
         HashSet<String> virussen1 = new HashSet<>();
         if (maphostnaarvirussen.containsKey(hostid1)) {
             virussen1 = maphostnaarvirussen.get(hostid1);
-              String virussen1lijst = virussen1.toString();
-                    viruslijst1area.setText(virussen1lijst);
+            List sortedListvirussen1 = new ArrayList(virussen1);
+            Collections.sort(sortedListvirussen1);
+            for (int i = 0; i < sortedListvirussen1.size(); i++) {
+                viruslijst1area.append(sortedListvirussen1.get(i).toString() + "\n");
+            }
         }
-
-        //Collections.sort(virussen1);
         return virussen1;
     }
 
-    public static HashSet ReturnVirusIDLijst2(String hostid2, HashMap<String, HashSet<String>> maphostnaarvirussen, JTextArea viruslijst2area) {
+    public static HashSet returnVirusIDLijst2(String hostid2, HashMap<String, HashSet<String>> maphostnaarvirussen, JTextArea viruslijst2area) {
+        viruslijst2area.setText("");
 
         HashSet<String> virussen2 = new HashSet<>();
         if (maphostnaarvirussen.containsKey(hostid2)) {
             virussen2 = maphostnaarvirussen.get(hostid2);
-            //System.out.println(hosts);
-            String virussen2lijst = virussen2.toString();
-                    viruslijst2area.setText(virussen2lijst);
-        }
+            List sortedListvirussen2 = new ArrayList(virussen2);
+            Collections.sort(sortedListvirussen2);
+            for (int i = 0; i < sortedListvirussen2.size(); i++) {
+                viruslijst2area.append(sortedListvirussen2.get(i).toString() + "\n");
+            }
 
-        //Collections.sort(virussen1);
+        }
         return virussen2;
     }
 
-    public static void ReturnVirusIDOvereenkomst(HashSet virussenid1, HashSet virussenid2, JTextArea vergelijkarea)    {
+    public static void returnVirusIDOvereenkomst(HashSet virussenid1, HashSet virussenid2, JTextArea vergelijkarea) {
+        vergelijkarea.setText("");
+        
         Set vergelijkvirussenid = new TreeSet(virussenid1);
-                    vergelijkvirussenid.retainAll(virussenid2);
-                    String vergelijkidvirussen = vergelijkvirussenid.toString();
-                    vergelijkarea.setText(vergelijkidvirussen);
+        vergelijkvirussenid.retainAll(virussenid2);
+        List vergelijkidvirussen = new ArrayList(vergelijkvirussenid);
+        for (int i = 0; i < vergelijkidvirussen.size(); i++) {
+            vergelijkarea.append(vergelijkidvirussen.get(i).toString() + "\n");
+        }
     }
 
-    public static HashSet ReturnVirusClasseLijst1(String hostid1, JComboBox classificatiebox, JTextArea viruslijst1area) {
-        String virusclasseitem1 = classificatiebox.getSelectedItem().toString();
-        viruslijst1area.setText(virusclasseitem1);
-        
-        HashSet<String> virusclasse1 = new HashSet<>();
-        virusclasse1.add(virusclasseitem1);
+    static void returnVirusHostLijst1(HashSet<String> virussen1, HashMap<String, HashSet<String>> mapvirusidnaarhost, JTextArea viruslijst1area) {
 
-        return virusclasse1;
+        for (String item : virussen1) {
+            if (mapvirusidnaarhost.containsKey(item)) {
+                System.out.println(mapvirusidnaarhost.get(item).size());
+            }
+        }
     }
-        
-    public static HashSet ReturnVirusClasseLijst2(String hostid2, JComboBox classificatiebox, JTextArea viruslijst2area) {
-        String virusclasseitem2 = classificatiebox.getSelectedItem().toString();
-        viruslijst2area.setText(virusclasseitem2);
-        
-        HashSet<String> virusclasse2 = new HashSet<>();
-        virusclasse2.add(virusclasseitem2);
 
-        return virusclasse2;
-        
+    static void returnVirusHostLijst2(HashSet<String> virussen2, HashMap<String, HashSet<String>> mapvirusidnaarhost, JTextArea viruslijst2area) {
+
+
+        for (String item : virussen2) {
+            if (mapvirusidnaarhost.containsKey(item)) {
+                System.out.println(mapvirusidnaarhost.get(item).size());
+            }
+        }
     }
-    
-    public static void ReturnVirusClasseOvereenkomst(HashSet virussenclasse1, HashSet virussenclasse2, JTextArea vergelijkarea){
-            Set vergelijkvirussenclasse = new TreeSet(virussenclasse1);
-                    vergelijkvirussenclasse.retainAll(virussenclasse2);
-                    String vergelijkclassevirussen = vergelijkvirussenclasse.toString();
-                    vergelijkarea.setText(vergelijkclassevirussen);
+
+    public static void returnVirusHostOvereenkomst(HashSet virussenid1, HashSet virussenid2, JTextArea vergelijkarea) {
        
+        Set vergelijkvirussenid = new TreeSet(virussenid1);
+        vergelijkvirussenid.retainAll(virussenid2);
+        List vergelijkidvirussen = new ArrayList(vergelijkvirussenid);
+        for (int i = 0; i < vergelijkidvirussen.size(); i++) {
+            vergelijkarea.append(vergelijkidvirussen.get(i).toString() + "\n");
+        }
+    }
 }
-
-    
-}
-
