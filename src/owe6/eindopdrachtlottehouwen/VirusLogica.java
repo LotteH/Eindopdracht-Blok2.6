@@ -106,7 +106,7 @@ public class VirusLogica {
 
     /**
      * Methode vergelijkt de virusid's van HostID Virus 1 en HostID Virus 2.
-     * Virusid's die bij beide voorkomen worden in de vergelijkarea gezet.
+     * Virusid's die bij beide hosts voorkomen worden in de vergelijkarea gezet.
      */
     public static void returnVirusIDOvereenkomst(HashSet virussenid1, HashSet virussenid2, JTextArea vergelijkarea) {
         vergelijkarea.setText("");
