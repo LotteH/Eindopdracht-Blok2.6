@@ -1,7 +1,6 @@
 package owe6.eindopdrachtlottehouwen;
 
-//imports
-import java.awt.Color;
+
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -9,101 +8,85 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.HashMap;
+import java.util.HashSet;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import java.awt.*;
-import java.io.*;
-import java.util.*;
-import java.util.regex.Pattern;
-import javax.swing.*;
-
 /**
- *Class waarin virusobjecten worden gemaakt. getters en setters komen hier tot stand.
- * Nog geen informatie opgehaald uit bestand met deze class en getters. Wordt nog aan gewerkt.
+ * Class waarin virusobjecten worden gemaakt. getters en setters komen hier tot
+ * stand. Nog geen informatie opgehaald uit bestand met deze class en getters.
+ * Wordt nog aan gewerkt.
+ *
  * @author lotte
- * @version 1.00
- * @since 07-02-2018 (7 feb. 2018)
- * 
- * Praktische gegevens:
- * Student: Lotte Houwen
- * Studentnummer: 542221
- * Klas: Bin2c
+ * @version 2.00
+ * @since 28-02-2018 (28 feb. 2018)
+ *
+ * Praktische gegevens: Student: Lotte Houwen Studentnummer: 542221 Klas: Bin2c
  * Opleiding: Bioinformatica aan Hogeschool Arnhem en Nijmegen (HAN)
- * 
- * Opmerkingen:
- * Met deze code heb ik af en toe samengewerkt met andere studenten. Ook hebben we een middag bij elkaar gezeten.
- * Code kan dus soms overeenkomen. Soms hebben andere studenten mij geholpen/overlegd met een klein stukje.
- * Als het goed is staat er in het commentaar dan bij wie dit gedaan heeft.
- * Studenten met wie ik het meest overlegt heb of in diens aanwezigheid aan mijn code gewerkt heb zijn: 
- * Jonathan Feenstra, Nicky van Bergen, Justin Huberts, Thijs Weenink en in mindere mate Alex Janse en Damian Bolwerk.
+ *
+ * Opmerkingen: Met deze code heb ik af en toe samengewerkt met andere
+ * studenten. Ook hebben we een middag bij elkaar gezeten. Code kan dus soms
+ * overeenkomen. Soms hebben andere studenten mij geholpen/overlegd met een
+ * klein stukje. Als het goed is staat er in het commentaar dan bij wie dit
+ * gedaan heeft. Studenten met wie ik het meest overlegt heb of in diens
+ * aanwezigheid aan mijn code gewerkt heb zijn: Jonathan Feenstra, Nicky van
+ * Bergen, Justin Huberts, Thijs Weenink en in mindere mate Alex Janse en Damian
+ * Bolwerk en Huub GoldtStein.
  */
-
 /**
- * Class om het bestand aan te roepen, data eruit te filteren en actionlistener voor bepaalde buttons.
+ * Class VirusGUI om Gui aan te maken en acties uit te voeren als er op bepaalde
+ * buttons gedrukt wordt.
  */
 public class VirusGUI extends JFrame implements ActionListener {
 
     // bestand zoeken
-    JLabel bestandlabel;
-    JTextField bestandveld;
-    JButton bladerbutton;
+    JLabel bestandLabel;
+    static JTextField bestandField;
+    JButton bladerButton;
 
     // classificatiedropdown
-    JLabel classificatielabel;
-    String[] classificatiecomboopties = {""};
-    JComboBox classificatiebox;
-    JButton classificatiebutton;
+    JLabel classificatieLabel;
+    String[] classificatieComboOpties = {""};
+    JComboBox classificatieBox;
+    JButton classificatieButton;
 
     //hostdropdown 
-    JLabel hostidlabelvirus1;
+    JLabel hostIDLabelVirus1;
     String[] hostidcomboopties1 = {""};
-    JComboBox hostidbox1;
-    JLabel hostidlabelvirus2;
-    String[] hostidcomboopties2 = {""};
-    JComboBox hostidbox2;
+    JComboBox hostIDBox1;
+    JLabel hostIDLabelVirus2;
+    String[] hostIDComboOpties2 = {""};
+    JComboBox hostIDBox2;
 
     //sorteeropties
-    JLabel radiovergelijklabel;
-    ButtonGroup buttongroep;
-    JRadioButton radio1;
-    JRadioButton radio2;
+    JLabel radioVergelijkLabel;
+    ButtonGroup buttonGroup;
+    JRadioButton radioButton1;
+    JRadioButton radioButton2;
 
     //viruslijsten
-    JTextArea viruslijst1area;
-    JLabel viruslijst1label;
-    JTextArea viruslijst2area;
-    JLabel viruslijst2label;
+    JTextArea virusLijstArea1;
+    JLabel virusLijst1Label;
+    JTextArea virusLijstArea2;
+    JLabel virusLijst2Label;
 
     //sorteeropties & output
-    JTextArea vergelijkarea;
-    JLabel vergelijklabel;
+    JTextArea vergelijkArea;
+    JLabel vergelijkLabel;
 
     //overig
-    JFileChooser filechooser;
-    private static BufferedReader filelezer;
     String[] lijn;
-    ArrayList<Object> virusclasse_lijst = new ArrayList<>();
-    HashMap<String, HashSet<String>> mapclassenaarhost = new HashMap<>();
-    HashMap<String, HashSet<String>> maphostnaarvirussen = new HashMap<>();
-    HashMap<String, HashSet<String>> mapvirusidnaarhost = new HashMap<>();
 
     /**
-     *Maakt GUI frame aan.
+     * Maakt GUI frame aan.
      */
     public static void main(String[] args) {
         VirusGUI frame = new VirusGUI();
@@ -114,7 +97,7 @@ public class VirusGUI extends JFrame implements ActionListener {
     }
 
     /**
-     *Creeërt inhoud van GUI
+     * Creeërt inhoud van GUI
      */
     public void createGUI() {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -122,220 +105,141 @@ public class VirusGUI extends JFrame implements ActionListener {
         window.setLayout(new FlowLayout());
 
         // bestand zoeken
-        bestandlabel = new JLabel("FILE      ");
-        window.add(bestandlabel);
-        bestandveld = new JTextField(70);
-        window.add(bestandveld);
-        bladerbutton = new JButton("     Bladeren     ");
-        bladerbutton.addActionListener(this);
-        window.add(bladerbutton);
+        bestandLabel = new JLabel("FILE      ");
+        window.add(bestandLabel);
+        bestandField = new JTextField(70);
+        window.add(bestandField);
+        bladerButton = new JButton("     Bladeren     ");
+        bladerButton.addActionListener(this);
+        window.add(bladerButton);
 
         // Virusapplicatie
-        classificatielabel = new JLabel("Virus Classificatie");
-        window.add(classificatielabel);
+        classificatieLabel = new JLabel("Virus Classificatie");
+        window.add(classificatieLabel);
 
-        classificatiebox = new JComboBox(classificatiecomboopties);
-        classificatiebox.setPreferredSize(new Dimension(710, 25));
-        window.add(classificatiebox);
-        classificatiebutton = new JButton(" Kies Klasse ");
-        classificatiebutton.addActionListener(this);
-        window.add(classificatiebutton);
+        classificatieBox = new JComboBox(classificatieComboOpties);
+        classificatieBox.setPreferredSize(new Dimension(710, 25));
+        window.add(classificatieBox);
+        classificatieButton = new JButton(" Kies Klasse ");
+        classificatieButton.addActionListener(this);
+        window.add(classificatieButton);
 
         // Virussen vergelijken
-        hostidlabelvirus1 = new JLabel("Host ID Virus 1");
-        hostidlabelvirus1.setPreferredSize(new Dimension(450, 25));
-        window.add(hostidlabelvirus1);
+        hostIDLabelVirus1 = new JLabel("Host ID 1");
+        hostIDLabelVirus1.setPreferredSize(new Dimension(450, 25));
+        window.add(hostIDLabelVirus1);
 
-        hostidlabelvirus2 = new JLabel("Host ID Virus 2");
-        hostidlabelvirus2.setPreferredSize(new Dimension(450, 25));
-        window.add(hostidlabelvirus2);
-        bestandlabel.setVisible(true);
+        hostIDLabelVirus2 = new JLabel("Host ID 2");
+        hostIDLabelVirus2.setPreferredSize(new Dimension(450, 25));
+        window.add(hostIDLabelVirus2);
+        bestandLabel.setVisible(true);
 
-        hostidbox1 = new JComboBox(hostidcomboopties1);
-        hostidbox1.setPreferredSize(new Dimension(450, 25));
-        window.add(hostidbox1);
+        hostIDBox1 = new JComboBox(hostidcomboopties1);
+        hostIDBox1.setPreferredSize(new Dimension(450, 25));
+        window.add(hostIDBox1);
 
-        hostidbox2 = new JComboBox(hostidcomboopties2);
-        hostidbox2.setPreferredSize(new Dimension(450, 25));
-        window.add(hostidbox2);
+        hostIDBox2 = new JComboBox(hostIDComboOpties2);
+        hostIDBox2.setPreferredSize(new Dimension(450, 25));
+        window.add(hostIDBox2);
 
-        viruslijst1label = new JLabel("Viruslijst Virus 2");
-        viruslijst1label.setPreferredSize(new Dimension(450, 100));
+        virusLijst1Label = new JLabel("Viruslijst Virus 2");
+        virusLijst1Label.setPreferredSize(new Dimension(450, 100));
 
-        radiovergelijklabel = new JLabel("Kies een sorteeroptie:     ");
-        window.add(radiovergelijklabel);
+        radioVergelijkLabel = new JLabel("Kies een sorteeroptie:     ");
+        window.add(radioVergelijkLabel);
 
-        radio1 = new JRadioButton("ID");
-        radio1.addActionListener(this);
-        radio2 = new JRadioButton("Aantal Hosts                                                                                                                                                                                                        ");
-        radio2.addActionListener(this);
+        radioButton1 = new JRadioButton("ID");
+        radioButton1.addActionListener(this);
+        radioButton2 = new JRadioButton("Aantal Hosts                                                                                                                                                                                                        ");
+        radioButton2.addActionListener(this);
 
-        window.add(radio1);
-        window.add(radio2);
+        window.add(radioButton1);
+        window.add(radioButton2);
 
-        buttongroep = new ButtonGroup();
-        buttongroep.add(radio1);
-        buttongroep.add(radio2);
+        buttonGroup = new ButtonGroup();
+        buttonGroup.add(radioButton1);
+        buttonGroup.add(radioButton2);
 
-        viruslijst1area = new JTextArea();
-        viruslijst1area.setPreferredSize(new Dimension(450, 150));
-        window.add(viruslijst1area);
+        virusLijstArea1 = new JTextArea();
+        virusLijstArea1.setPreferredSize(new Dimension(450, 150));
+        window.add(virusLijstArea1);
 
-        viruslijst2label = new JLabel("Viruslijst Virus 2");
-        viruslijst2label.setPreferredSize(new Dimension(450, 100));
+        virusLijst2Label = new JLabel("Viruslijst Virus 2");
+        virusLijst2Label.setPreferredSize(new Dimension(450, 100));
 
-        viruslijst2area = new JTextArea();
-        viruslijst2area.setPreferredSize(new Dimension(450, 150));
-        window.add(viruslijst2area);
+        virusLijstArea2 = new JTextArea();
+        virusLijstArea2.setPreferredSize(new Dimension(450, 150));
+        window.add(virusLijstArea2);
 
-        vergelijklabel = new JLabel("                                                            Overeenkomend tussen Virus 1 en Virus 2                                                            ");
-        window.add(vergelijklabel);
+        vergelijkLabel = new JLabel("                                                            Overeenkomend tussen Virus 1 en Virus 2                                                            ");
+        window.add(vergelijkLabel);
 
-        vergelijkarea = new JTextArea();
-        vergelijkarea.setPreferredSize(new Dimension(940, 150));
-        window.add(vergelijkarea);
+        vergelijkArea = new JTextArea();
+        vergelijkArea.setPreferredSize(new Dimension(940, 150));
+        window.add(vergelijkArea);
     }
-/**
- * Methode die acties uitvoerd na activatie van bepaalde knop/list/button.
- * Daarnaast filtert het data uit het bestand. In toekomst moet dit nog in eigen methodes.
- */
+
+    /**
+     * Methode die acties uitvoerd na activatie van bepaalde knop/list/button.
+     * Het laat zien welke methoden worden aangeroepen als er op bepaalde
+     * buttons gedrukt worden.
+     */
     @Override
     public void actionPerformed(ActionEvent event) {
         File selectedFile;
         int reply;
         String bestand;
-/**
- *  Met Bladerbutton kan er een bestand gekozen worden. Deze wordt gelezen en juiste data wordt eruit gefilterd.
- */
-        if (event.getSource() == bladerbutton) {
 
-            
-            filechooser = new JFileChooser();
-            reply = filechooser.showOpenDialog(this);
-            if (reply == JFileChooser.APPROVE_OPTION) {
-                selectedFile = filechooser.getSelectedFile();
-                bestandveld.setText(selectedFile.getName());
-                bestand = selectedFile.getAbsolutePath();
-
-                String line;
-
-                try {
-                    filelezer = new BufferedReader(new FileReader(bestand));
-                } catch (FileNotFoundException ex) {
-                    Logger.getLogger(VirusGUI.class.getName()).log(Level.SEVERE, null, ex);
-                } 
-
-                ArrayList<Object> virusid_lijst = new ArrayList<>();
-                ArrayList<Object> virusnaam_lijst = new ArrayList<>();
-
-                Set<String> uniekevirusclasseset = new HashSet<>();
-
-                try {
-                    while ((line = filelezer.readLine()) != null) {
-                        lijn = line.split("\t", -1);                // hulp Jonathan Feenstra
-
-                        HashSet<String> hostset = new HashSet<>();          // hulp Jonathan Feenstra
-                        String host = lijn[7] + " (" + lijn[8] + ")";
-                        hostset.add(host);
-                        if (!mapclassenaarhost.containsKey(lijn[2])) {
-
-                            mapclassenaarhost.put(lijn[2], hostset);
-                        } else {
-                            mapclassenaarhost.get(lijn[2]).add(host);
-                        }
-
-                        HashSet<String> virusset = new HashSet<>();
-                        String virus = lijn[0];
-                        hostset.add(virus);
-                        if (!maphostnaarvirussen.containsKey(lijn[7])) {
-
-                            maphostnaarvirussen.put(lijn[7], virusset);
-                        } else {
-                            maphostnaarvirussen.get(lijn[7]).add(virus);
-                        }
-
-                        HashSet<String> virusidset = new HashSet<>();          // hulp Jonathan Feenstra
-                        String hosts = lijn[7];
-                        virusidset.add(hosts);
-                        if (!mapvirusidnaarhost.containsKey(lijn[0])) {
-
-                            mapvirusidnaarhost.put(lijn[0], virusidset);
-                        } else {
-                            mapvirusidnaarhost.get(lijn[0]).add(hosts);
-                        }
-
-                        if (lijn[2] != null) {
-                            virusclasse_lijst.add(lijn[2]);
-                        } else {
-                            virusclasse_lijst.add(" ");
-                        }
-
-                        if (lijn[2] != null) {
-                            uniekevirusclasseset.add(lijn[2]);
-                        } else {
-                            uniekevirusclasseset.add(" ");
-                        }
-
-                    }
-                } catch (IOException ex) {
-                    {System.out.println("Er is IO fout aangetroffen. Wellicht niet het juiste bestand ingevoerd.");
-                     System.out.println("Info: " + ex.toString());}
-                     
-                }catch (IndexOutOfBoundsException exc)
-                    {System.out.println("Er is IndexOutOfBounce fout aangetroffen. Wellicht niet het juiste bestand ingevoerd.");
-                     System.out.println("Info: " + exc.toString());}
-                    catch (Exception exce) {
-                    System.out.println("Er is een fout opgetreden. Probeer opnieuw.");
-                    System.out.println("Info: " + exce.toString());
-
-                ArrayList<String> uniekevirusclasselijst = new ArrayList<>(uniekevirusclasseset);
-
-                for (int i = 1; i < uniekevirusclasselijst.size(); i++) {
-                    classificatiebox.addItem(uniekevirusclasselijst.get(i));
-                }
-            }
-        }
-/**
- *  Met classificatiebutton kan er een virusclassificatie gekozen worden. Deze vult hostid dropdowns.
- */
-        if (event.getSource() == classificatiebutton) {
-            VirusLogica.returnHostIDOptions(classificatiebox, mapclassenaarhost, hostidbox1, hostidbox2);
-
-        }
-/**
- *  Hiermee kan er een gesorteerd worden op virusid.
- */
-        if (event.getSource() == radio1) {
-            
-            String hostid1 = VirusLogica.returnHost1(hostidbox1);
-            String hostid2 = VirusLogica.returnHost2(hostidbox2);
-
-            HashSet virussenid1 = VirusLogica.returnVirusIDLijst1(hostid1, maphostnaarvirussen, viruslijst1area);
-            HashSet virussenid2 = VirusLogica.returnVirusIDLijst2(hostid2, maphostnaarvirussen, viruslijst2area);
-
-            VirusLogica.returnVirusIDOvereenkomst(virussenid1, virussenid2, vergelijkarea);
-
-        }
-/**
- *  Hiermee kan er gesorteerd worden op het aantal keer dat een host voorkomt bij diverse virussen. Werkt nog niet naar behoren.
- */
-        if (event.getSource() == radio2) {
-            
-            String hostid1 = VirusLogica.returnHost1(hostidbox1);
-            String hostid2 = VirusLogica.returnHost2(hostidbox2);
-
-            HashSet virussenid1 = VirusLogica.returnVirusIDLijst1(hostid1, maphostnaarvirussen, viruslijst1area);
-            HashSet virussenid2 = VirusLogica.returnVirusIDLijst2(hostid2, maphostnaarvirussen, viruslijst2area);
-
-            VirusLogica.returnVirusHostLijst1(virussenid1, mapvirusidnaarhost, viruslijst1area);
-            VirusLogica.returnVirusHostLijst2(virussenid2, mapvirusidnaarhost, viruslijst2area);
-
-            VirusLogica.returnVirusIDOvereenkomst(virussenid1, virussenid2, vergelijkarea);
-
-/**
-Er is bewust gekozen voor 2 radiobuttons in plaats van 3. De classificatiesorteerder zou telkens maar dezelfde klasse teruggeven waardoor sorteren overbodig is.
-Dit komt door de manier waarop de hostiddropdowns gevult worden naar aanleiding van de classificatie die is aangevinkt.*/
+        /**
+         * Met Bladerbutton kan er een bestand gekozen worden. Deze wordt
+         * gelezen en juiste data wordt eruit gefilterd.
+         */
+        if (event.getSource() == bladerButton) {
+            VirusLogica.readFile(VirusLogica.kiesFile());
+            VirusLogica.classificatievullen(classificatieBox);
         }
 
+        /**
+         * Met classificatiebutton kan er een virusclassificatie gekozen worden.
+         * Ook worden hier de hostID dropdowns gevult.
+         *
+         */
+        if (event.getSource() == classificatieButton) {
+            HashSet<Object> lijstid12 = VirusLogica.hostidboxenvullen(classificatieBox, hostIDBox1, hostIDBox2);
+            VirusLogica.fillHostIDBoxen(hostIDBox1, hostIDBox2, lijstid12);
+        }
+
+        /**
+         * Met radioButton 1 kan er gesorteerd worden op VirusID, de virussen 
+         * uit de 2 host worden vergeken en de overeenkomt wordt weergegeven.
+         */
+        
+        if (event.getSource() == radioButton1) {
+            VirusLogica.makeVirusIDArrays(hostIDBox1, hostIDBox2);
+            VirusLogica.sortVirusIDArrays(virusLijstArea1, virusLijstArea2);
+            VirusLogica.fillArea1(virusLijstArea1);
+            VirusLogica.fillArea2(virusLijstArea2);
+            HashSet<Integer> hsVergelijkVirusID = VirusLogica.compareVirusID();
+            Virus[] aVergelijkVirusID = VirusLogica.sortedVergelijkVirusID(hsVergelijkVirusID);
+            VirusLogica.fillVergelijkArea(vergelijkArea, aVergelijkVirusID);
+        }
+
+        /**
+         * Met radioButton 2 kan er gesorteerd worden op aantal hosts, er wordt van de virussen 
+         * uit de 2 host gekeken hoeveel host's ze hebben. Dde overeenkomt wordt weergegeven.
+         */
+        if (event.getSource() == radioButton2) {
+            //VirusLogica.makeVirusIDArrays(hostidbox1, hostidbox2, viruslijst1area, viruslijst2area);
+            //VirusLogica.sortVirusIDArrays(hostidbox1, hostidbox2, viruslijst1area, viruslijst2area);String hostid1 = VirusLogica.returnHost1(hostidbox1);
+            //String hostid2 = VirusLogica.returnHost2(hostidbox2);
+
+            //HashSet virussenid1 = VirusLogica.returnVirusIDLijst1(hostid1, maphostnaarvirussen, viruslijst1area);
+            //HashSet virussenid2 = VirusLogica.returnVirusIDLijst2(hostid2, maphostnaarvirussen, viruslijst2area);
+
+            //VirusLogica.returnVirusHostLijst1(virussenid1, mapvirusidnaarhost, viruslijst1area);
+            //VirusLogica.returnVirusHostLijst2(virussenid2, mapvirusidnaarhost, viruslijst2area);
+
+            //VirusLogica.returnVirusIDOvereenkomst(virussenid1, virussenid2, vergelijkarea);
+        }
     }
-    }}
+}
