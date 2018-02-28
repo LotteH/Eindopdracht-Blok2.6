@@ -1,6 +1,5 @@
 package owe6.eindopdrachtlottehouwen;
 
-
 // imports
 import java.io.BufferedReader;
 import java.io.File;
@@ -12,19 +11,22 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JTextArea;
+
 /**
- * Class die logica achter virusGUI bevat. Hierin staan de methodes die het bestand kiezen en lezen. 
- * De juiste data wordt eruit gefilterd en uit de dropdown boxen worden opties geselecteerd.
- * De gekozen opties worden ook nog gesorterrd.
- * aangestuurd door de sorteeropties.
+ * Class die logica achter virusGUI bevat. Hierin staan de methodes die het
+ * bestand kiezen en lezen. De juiste data wordt eruit gefilterd en uit de
+ * dropdown boxen worden opties geselecteerd. De gekozen opties worden ook nog
+ * gesorterrd. aangestuurd door de sorteeropties.
  *
  * @author lotte
  * @version 2.00
@@ -37,9 +39,6 @@ public class VirusLogica {
 
     // HashSets (hs)
     static HashSet<Virus> hsVirusObjectenTotaal = new HashSet();
-    static HashSet<Virus> hsVirusIDgekozen1 = new HashSet();
-    static HashSet<Virus> hsVirusIDgekozen2 = new HashSet();
-
     static HashSet<String> hsClasses = new HashSet();
 
     // Arrays (a)
@@ -47,8 +46,13 @@ public class VirusLogica {
     static Virus[] aVirusIDArea1;
     static Virus[] aVirusIDArea2;
 
+    /**
+     * In deze methode wordt er een bestand gekozen.
+     * @return 
+     */
     public static String kiesFile() {
 
+        
         JFileChooser filechooser = new JFileChooser();
 
         int reply = filechooser.showOpenDialog(null);
@@ -58,10 +62,14 @@ public class VirusLogica {
             VirusGUI.bestandField.setText(selectedFile.getName());
             String bestandNaam = selectedFile.getAbsolutePath();
             return bestandNaam;
-        }
-        return null;
-    }
+        }return null;
+        } 
+    
 
+    /**
+     * In deze methode wordt het gekozen bestand gelezen.
+     * @param bestandNaam
+     */
     public static void readFile(String bestandNaam) {
 
         try {
@@ -70,6 +78,7 @@ public class VirusLogica {
             String line;
             inFile.readLine();
             while ((line = inFile.readLine()) != null) {
+                
                 aRegel = line.split("\t", -1); // -1 zorgt dat hij de lege tabs ook ziet
                 getElementen();
             }
@@ -78,80 +87,110 @@ public class VirusLogica {
             Logger.getLogger(VirusLogica.class
                     .getName()).log(Level.SEVERE, null, ex);
 
-        } catch (IOException ex) {
+        } catch (IOException | NullPointerException | ArrayIndexOutOfBoundsException ex) {
             Logger.getLogger(VirusLogica.class
                     .getName()).log(Level.SEVERE, null, ex);
+            
         }
-
     }
-/**
- * wordt aangeroepen in readFile
- */
+    /**
+     * In deze methode worden elementen uit de dataset gefilterd en in de 
+     * attributen van virusclass gestopt. Er wordt een HashMap gemaakt met als 
+     * key hostid's en als value een HashSet van VirusObjecten die voorkomen bij deze host.
+     * Ook wordt er een hashset gemaakt met alle virusclasse.
+     */
     public static void getElementen() {
         if (aRegel[7] != null) {// && !"".equals(array[7])) {
             if (!"".equals(aRegel[7])) {
                 int virus_id = Integer.parseInt(aRegel[0]);
                 String virusNaam = aRegel[1];
-                String viruslineage = aRegel[2];
-                String[] lineageArray = viruslineage.split(";");                        //fini
-                String virusclasse = lineageArray[1];
-                int host_id = Integer.parseInt(aRegel[7]);
-                String hostnaam = aRegel[8];
-                String hostIDcompleet = aRegel[7] + " (" + aRegel[8] + ")";
-                Virus virusObject = new Virus(virus_id, virusNaam, virusclasse, host_id, hostnaam);
+                String virusLineage = aRegel[2];
+                String[] lineageArray = virusLineage.split(";");                        //Fini
+                String virusClasse = lineageArray[1];
+                int hostID = Integer.parseInt(aRegel[7]);
+                String hostNaam = aRegel[8];
+                String hostIDCompleet = aRegel[7] + " (" + aRegel[8] + ")";
+                Virus virusObject = new Virus(virus_id, virusNaam, virusClasse, hostID, hostNaam);
 
                 hsVirusObjectenTotaal.add(virusObject);
-                if (!hmHostIDmetVirusObjecten.containsKey(hostIDcompleet)) {
-                    hmHostIDmetVirusObjecten.put(hostIDcompleet, (HashSet) hsVirusObjectenTotaal.clone());     //als die niet in map dan key:value toevoegen
+                if (!hmHostIDmetVirusObjecten.containsKey(hostIDCompleet)) {            // Jonathan
+                    hmHostIDmetVirusObjecten.put(hostIDCompleet, (HashSet) hsVirusObjectenTotaal.clone());     //als die niet in map dan key:value toevoegen
                 } else {
-                    hmHostIDmetVirusObjecten.get(hostIDcompleet).add(virusObject);                                                                // als key wel instaat voeg alleen een extra virus toe aan value
+                    hmHostIDmetVirusObjecten.get(hostIDCompleet).add(virusObject);                                                                // als key wel instaat voeg alleen een extra virus toe aan value
                 }
 
-                hsClasses.add(virusclasse);
+                hsClasses.add(virusClasse);
                 virusObject.getVirus_id();
 
                 hsVirusObjectenTotaal.clear();
             }
         }
     }
-    //System.out.println(classeset);
 
+    /**
+     * methode die de het dropdownmenu van classificatie vult. 
+     * @param classificatiebox
+     */
     public static void classificatievullen(JComboBox classificatiebox) {
-        System.out.println(hsClasses);
-        //ArrayList<String> classelijst = new ArrayList<>();
-        //classelijst.addAll(classeset);
         for (String s : hsClasses) {
             classificatiebox.addItem(s);
         }
     }
 
-    public static HashSet<Object> hostidboxenvullen(JComboBox classificatiebox, JComboBox hostid1box, JComboBox hostid2box) {
+    /**
+     * Methode pakt de gekozen classificatie en retouneert een Hashset met strings waar de HostID's in staan. 
+     * @param classificatiebox
+     * @return
+     */
+    public static HashSet<String> hostidboxenvullen(JComboBox classificatiebox) {
         String gekozenClassificatie = classificatiebox.getSelectedItem().toString();
 
         Object[] sortedKeys = hmHostIDmetVirusObjecten.keySet().toArray();
         Arrays.sort(sortedKeys);
 
-        HashSet<Object> hsHostIDBoxOpties = new HashSet();
+        HashSet<String> hsHostIDBoxOpties = new HashSet();
 
         for (Object key : sortedKeys) {
             HashSet<Virus> hsVirusObjectenValues = hmHostIDmetVirusObjecten.get(key);
             for (Virus v : hsVirusObjectenValues) {
                 if (gekozenClassificatie.contains(v.getVirusclasse()));
                 {
-                    hsHostIDBoxOpties.add(key);
+                    hsHostIDBoxOpties.add(key.toString());
                 }
             }
         }
         return hsHostIDBoxOpties;
     }
 
-    public static void fillHostIDBoxen(JComboBox hostid1box, JComboBox hostid2box, HashSet<Object> lijstid12) {
-        for (Object o : lijstid12) {
-            hostid1box.addItem(o);
-            hostid2box.addItem(o);
-        }
+    /**
+     * Methode die de items uit de combobox haalt (leeghaalt)
+     * De comboboxen daarna gevuld met de beschikbare hostid's en namen.
+     * 
+     * 
+     * @param hostid1box
+     * @param hostid2box
+     * @param hsIDVan1en2
+     */
+    public static void fillHostIDBoxen(JComboBox hostid1box, JComboBox hostid2box, HashSet<String> hsIDVan1en2) {
+        hostid1box.removeAllItems();
+        hostid2box.removeAllItems();
+
+        List<String> alTempList = new ArrayList<>(hsIDVan1en2);
+        Collections.sort(alTempList);
+
+        hostid1box.setModel(new DefaultComboBoxModel(alTempList.toArray()));
+        hostid2box.setModel(new DefaultComboBoxModel(alTempList.toArray()));
     }
 
+    /**
+     * Methode neemt de gekozen opties van de HostID comboboxen.
+     * Vervolgens worden deze waardes gebruikt als keys in de HashMap.
+     * Van deze keys worden de waardes (een array van Virussen) opgehaalt en 
+     * in nieuwe variabele opgeslagen.
+     * 
+     * @param hostid1box
+     * @param hostid2box
+     */
     public static void makeVirusIDArrays(JComboBox hostid1box, JComboBox hostid2box) {
         String gekozenHostIDBox1 = hostid1box.getSelectedItem().toString();
         String gekozenHostIDBox2 = hostid2box.getSelectedItem().toString();
@@ -160,11 +199,21 @@ public class VirusLogica {
         aVirusIDArea2 = hmHostIDmetVirusObjecten.get(gekozenHostIDBox2).toArray(new Virus[0]);
     }
 
+    /**
+     * Methode die de arrays sorteert.
+     * @param viruslijst1area
+     * @param viruslijst2area
+     */
     public static void sortVirusIDArrays(JTextArea viruslijst1area, JTextArea viruslijst2area) {
         Arrays.sort(aVirusIDArea1, Virus.VirusIDComparator);
         Arrays.sort(aVirusIDArea2, Virus.VirusIDComparator);
     }
 
+    /**
+     * Methode die eerste area vult met de gesorteerde array van HostID1.
+     * 
+     * @param viruslijst1area
+     */
     public static void fillArea1(JTextArea viruslijst1area) {
         String sVirusID1 = "";
         for (Virus v : aVirusIDArea1) {
@@ -173,6 +222,11 @@ public class VirusLogica {
         viruslijst1area.setText(sVirusID1);
     }
 
+    /**
+     * Methode die tweede area vult met de gesorteerde array van HostID2.
+     * 
+     * @param viruslijst2area
+     */
     public static void fillArea2(JTextArea viruslijst2area) {
         String sVirusIDArea2 = "";
         for (Virus v : aVirusIDArea2) {
@@ -181,49 +235,34 @@ public class VirusLogica {
         viruslijst2area.setText(sVirusIDArea2);
     }
 
-    public static HashSet<Virus> compareVirusID() {
-        HashSet<Virus> hsVirusIDArea1 = new HashSet<>(Arrays.asList(aVirusIDArea1));
-        HashSet<Virus> hsVirusIDArea2 = new HashSet<>(Arrays.asList(aVirusIDArea2));
+    /**
+     * Methode die de VirusIDLijsten array split op tabs  en in een String[] zet.
+     * Daarna worden deze arrays omgezet in LinkedHashSet waardoor er gekeken kan worden welke overeenkomen.
+     * De overlap wordt geretouneerd.
+     * @param lijst1
+     * @param lijst2
+     * @return
+     */
+    public static Set<String> compareVirusID(String lijst1, String lijst2) {
+        String[] aVirusIDLijst1 = lijst1.split("\n");
+        String[] aVirusIDLijst2 = lijst2.split("\n");
 
-        HashSet <Integer> hsvirusIDint1 = new HashSet<>();
-        HashSet <Integer> hsvirusIDint2 = new HashSet<>();
-        
-        HashSet <Virus> hsVergelijkVirusID = new HashSet(hsvirusIDint1);
-        hsVergelijkVirusID.retainAll(hsvirusIDint2);
-        return hsVergelijkVirusID;
-        
-        /* retainall op integers waardoor er wel overeenkomst is. 
-        
-        for (Virus v : hsVirusIDArea1){
-            hsvirusIDint1.add(v.getVirus_id());
-        }
-        
-        for (Virus v : hsVirusIDArea2){
-            hsvirusIDint2.add(v.getVirus_id());
-        }
-        
-        HashSet <Integer> hsVergelijkVirusIDint = new HashSet(hsvirusIDint1);
-        hsVergelijkVirusIDint.retainAll(hsvirusIDint2);
-        return hsVergelijkVirusIDint;
-*/
-        
+        Set<String> hsVirusIDArea1 = new LinkedHashSet<>(Arrays.asList(aVirusIDLijst1));
+        Set<String> hsVirusIDArea2 = new LinkedHashSet<>(Arrays.asList(aVirusIDLijst2));
+
+        hsVirusIDArea1.retainAll(hsVirusIDArea2);
+        return hsVirusIDArea1;
     }
 
-    public static Virus [] sortedVergelijkVirusID(HashSet hsVergelijkVirusID) {
-        ArrayList<Virus> alVergelijkVirusID = new ArrayList(hsVergelijkVirusID);
-
-        Virus[] aVergelijkVirusID = alVergelijkVirusID.toArray(new Virus[0]);
-        Arrays.sort(aVergelijkVirusID, Virus.VirusIDComparator);
-     
-        return aVergelijkVirusID;
-    }
-    
-    public static void fillVergelijkArea(JTextArea vergelijkArea, Virus [] aVergelijkVirusID) {
-        String sVergelijkVirusIDArea = "";
-        for (Virus v : aVergelijkVirusID) {
-            sVergelijkVirusIDArea += v.getVirus_id() + "\n";
+    /**
+     * Methode vult de vergelijkingsarea met de VirusID die bij beide hosts voorkomen. 
+     * 
+     * @param vergelijkArea
+     * @param aVergelijkVirusID
+     */
+    public static void fillVergelijkArea(JTextArea vergelijkArea, Set<String> aVergelijkVirusID) {
+        for (String v : aVergelijkVirusID) {
+            vergelijkArea.append(v + System.lineSeparator());
         }
-        vergelijkArea.setText(sVergelijkVirusIDArea);
     }
-    
 }
