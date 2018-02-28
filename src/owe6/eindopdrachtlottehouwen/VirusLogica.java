@@ -48,11 +48,11 @@ public class VirusLogica {
 
     /**
      * In deze methode wordt er een bestand gekozen.
-     * @return 
+     *
+     * @return
      */
     public static String kiesFile() {
 
-        
         JFileChooser filechooser = new JFileChooser();
 
         int reply = filechooser.showOpenDialog(null);
@@ -62,12 +62,13 @@ public class VirusLogica {
             VirusGUI.bestandField.setText(selectedFile.getName());
             String bestandNaam = selectedFile.getAbsolutePath();
             return bestandNaam;
-        }return null;
-        } 
-    
+        }
+        return null;
+    }
 
     /**
      * In deze methode wordt het gekozen bestand gelezen.
+     *
      * @param bestandNaam
      */
     public static void readFile(String bestandNaam) {
@@ -78,26 +79,34 @@ public class VirusLogica {
             String line;
             inFile.readLine();
             while ((line = inFile.readLine()) != null) {
-                
+
                 aRegel = line.split("\t", -1); // -1 zorgt dat hij de lege tabs ook ziet
                 getElementen();
             }
 
         } catch (FileNotFoundException ex) {
+            System.out.println("Er is een fout opgetreden. Bestand niet gevonden.");
             Logger.getLogger(VirusLogica.class
                     .getName()).log(Level.SEVERE, null, ex);
 
         } catch (IOException | NullPointerException | ArrayIndexOutOfBoundsException ex) {
+            System.out.println("Er is een fout opgetreden.");
             Logger.getLogger(VirusLogica.class
                     .getName()).log(Level.SEVERE, null, ex);
-            
+
+        } catch (Exception ex) {
+            System.out.println("Er is een fout opgetreden.");
+            Logger.getLogger(VirusLogica.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
         }
     }
+
     /**
-     * In deze methode worden elementen uit de dataset gefilterd en in de 
-     * attributen van virusclass gestopt. Er wordt een HashMap gemaakt met als 
-     * key hostid's en als value een HashSet van VirusObjecten die voorkomen bij deze host.
-     * Ook wordt er een hashset gemaakt met alle virusclasse.
+     * In deze methode worden elementen uit de dataset gefilterd en in de
+     * attributen van virusclass gestopt. Er wordt een HashMap gemaakt met als
+     * key hostid's en als value een HashSet van VirusObjecten die voorkomen bij
+     * deze host. Ook wordt er een hashset gemaakt met alle virusclasse.
      */
     public static void getElementen() {
         if (aRegel[7] != null) {// && !"".equals(array[7])) {
@@ -128,7 +137,8 @@ public class VirusLogica {
     }
 
     /**
-     * methode die de het dropdownmenu van classificatie vult. 
+     * methode die de het dropdownmenu van classificatie vult.
+     *
      * @param classificatiebox
      */
     public static void classificatievullen(JComboBox classificatiebox) {
@@ -138,7 +148,9 @@ public class VirusLogica {
     }
 
     /**
-     * Methode pakt de gekozen classificatie en retouneert een Hashset met strings waar de HostID's in staan. 
+     * Methode pakt de gekozen classificatie en retouneert een Hashset met
+     * strings waar de HostID's in staan.
+     *
      * @param classificatiebox
      * @return
      */
@@ -163,10 +175,10 @@ public class VirusLogica {
     }
 
     /**
-     * Methode die de items uit de combobox haalt (leeghaalt)
-     * De comboboxen daarna gevuld met de beschikbare hostid's en namen.
-     * 
-     * 
+     * Methode die de items uit de combobox haalt (leeghaalt) De comboboxen
+     * daarna gevuld met de beschikbare hostid's en namen.
+     *
+     *
      * @param hostid1box
      * @param hostid2box
      * @param hsIDVan1en2
@@ -183,11 +195,11 @@ public class VirusLogica {
     }
 
     /**
-     * Methode neemt de gekozen opties van de HostID comboboxen.
-     * Vervolgens worden deze waardes gebruikt als keys in de HashMap.
-     * Van deze keys worden de waardes (een array van Virussen) opgehaalt en 
-     * in nieuwe variabele opgeslagen.
-     * 
+     * Methode neemt de gekozen opties van de HostID comboboxen. Vervolgens
+     * worden deze waardes gebruikt als keys in de HashMap. Van deze keys worden
+     * de waardes (een array van Virussen) opgehaalt en in nieuwe variabele
+     * opgeslagen.
+     *
      * @param hostid1box
      * @param hostid2box
      */
@@ -201,6 +213,7 @@ public class VirusLogica {
 
     /**
      * Methode die de arrays sorteert.
+     *
      * @param viruslijst1area
      * @param viruslijst2area
      */
@@ -211,7 +224,7 @@ public class VirusLogica {
 
     /**
      * Methode die eerste area vult met de gesorteerde array van HostID1.
-     * 
+     *
      * @param viruslijst1area
      */
     public static void fillArea1(JTextArea viruslijst1area) {
@@ -224,7 +237,7 @@ public class VirusLogica {
 
     /**
      * Methode die tweede area vult met de gesorteerde array van HostID2.
-     * 
+     *
      * @param viruslijst2area
      */
     public static void fillArea2(JTextArea viruslijst2area) {
@@ -236,9 +249,10 @@ public class VirusLogica {
     }
 
     /**
-     * Methode die de VirusIDLijsten array split op tabs  en in een String[] zet.
-     * Daarna worden deze arrays omgezet in LinkedHashSet waardoor er gekeken kan worden welke overeenkomen.
-     * De overlap wordt geretouneerd.
+     * Methode die de VirusIDLijsten array split op tabs en in een String[] zet.
+     * Daarna worden deze arrays omgezet in LinkedHashSet waardoor er gekeken
+     * kan worden welke overeenkomen. De overlap wordt geretouneerd.
+     *
      * @param lijst1
      * @param lijst2
      * @return
@@ -255,8 +269,9 @@ public class VirusLogica {
     }
 
     /**
-     * Methode vult de vergelijkingsarea met de VirusID die bij beide hosts voorkomen. 
-     * 
+     * Methode vult de vergelijkingsarea met de VirusID die bij beide hosts
+     * voorkomen.
+     *
      * @param vergelijkArea
      * @param aVergelijkVirusID
      */
