@@ -1,6 +1,5 @@
 package owe6.eindopdrachtlottehouwen;
 
-
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -10,6 +9,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -20,11 +22,10 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-/**
- * Class waarin virusobjecten worden gemaakt. getters en setters komen hier tot
- * stand. Nog geen informatie opgehaald uit bestand met deze class en getters.
- * Wordt nog aan gewerkt.
- *
+/* Applicatie leest een bestand in en verwerkt de data uit het bestand. 
+   Het doel van het bestand is om virussen uit het bestand te kunnen sorteren 
+   op diverse eigenschappen zoals virusid en het aantal hosts. 
+
  * @author lotte
  * @version 2.00
  * @since 28-02-2018 (28 feb. 2018)
@@ -195,42 +196,52 @@ public class VirusGUI extends JFrame implements ActionListener {
          * gelezen en juiste data wordt eruit gefilterd.
          */
         if (event.getSource() == bladerButton) {
-            VirusLogica.readFile(VirusLogica.kiesFile());
-            VirusLogica.classificatievullen(classificatieBox);
-        }
+            try {
+                VirusLogica.readFile(VirusLogica.kiesFile());
+                VirusLogica.classificatievullen(classificatieBox);
+            } catch (NullPointerException ex)  {
+                    Logger.getLogger(VirusLogica.class
+                            .getName()).log(Level.SEVERE, null, ex);
+                }
+            catch (IndexOutOfBoundsException ex)  {
+                    Logger.getLogger(VirusLogica.class
+                            .getName()).log(Level.SEVERE, null, ex);
+                }
+            }
 
-        /**
-         * Met classificatiebutton kan er een virusclassificatie gekozen worden.
-         * Ook worden hier de hostID dropdowns gevult.
-         *
-         */
-        if (event.getSource() == classificatieButton) {
-            HashSet<Object> lijstid12 = VirusLogica.hostidboxenvullen(classificatieBox, hostIDBox1, hostIDBox2);
-            VirusLogica.fillHostIDBoxen(hostIDBox1, hostIDBox2, lijstid12);
-        }
+            /**
+             * Met classificatiebutton kan er een virusclassificatie gekozen
+             * worden. Ook worden hier de hostID dropdowns gevult.
+             *
+             */
+            if (event.getSource() == classificatieButton) {
+                HashSet<String> lijstid12 = VirusLogica.hostidboxenvullen(classificatieBox);
+                VirusLogica.fillHostIDBoxen(hostIDBox1, hostIDBox2, lijstid12);
+            }
 
-        /**
-         * Met radioButton 1 kan er gesorteerd worden op VirusID, de virussen 
-         * uit de 2 host worden vergeken en de overeenkomt wordt weergegeven.
-         */
-        
-        if (event.getSource() == radioButton1) {
-            VirusLogica.makeVirusIDArrays(hostIDBox1, hostIDBox2);
-            VirusLogica.sortVirusIDArrays(virusLijstArea1, virusLijstArea2);
-            VirusLogica.fillArea1(virusLijstArea1);
-            VirusLogica.fillArea2(virusLijstArea2);
-            HashSet<Virus> hsVergelijkVirusID = VirusLogica.compareVirusID();
-            Virus[] aVergelijkVirusID = VirusLogica.sortedVergelijkVirusID(hsVergelijkVirusID);
-            VirusLogica.fillVergelijkArea(vergelijkArea, aVergelijkVirusID);
-        }
+            /**
+             * Met radioButton 1 kan er gesorteerd worden op VirusID, de
+             * virussen uit de 2 host worden vergeken en de overeenkomt wordt
+             * weergegeven.
+             */
+            if (event.getSource() == radioButton1) {
+                VirusLogica.makeVirusIDArrays(hostIDBox1, hostIDBox2);
+                VirusLogica.sortVirusIDArrays(virusLijstArea1, virusLijstArea2);
+                VirusLogica.fillArea1(virusLijstArea1);
+                VirusLogica.fillArea2(virusLijstArea2);
+                Set<String> hsVergelijkVirusID = VirusLogica.compareVirusID(virusLijstArea1.getText(), virusLijstArea2.getText());
+                VirusLogica.fillVergelijkArea(vergelijkArea, hsVergelijkVirusID);
+            }
 
-        /**
-         * Met radioButton 2 kan er gesorteerd worden op aantal hosts, er wordt van de virussen 
-         * uit de 2 host gekeken hoeveel host's ze hebben. Deze functie is nog niet af.
-         */
-        if (event.getSource() == radioButton2) {
-            // De bedoeling is dat deze een output teruggeeft in de tekstarea's
-            // Hierin staan de virussen gesorteerd op het aantals host die ze hebben. 
+            /**
+             * Met radioButton 2 kan er gesorteerd worden op aantal hosts, er
+             * wordt van de virussen uit de 2 host gekeken hoeveel host's ze
+             * hebben. Deze functie is nog niet af.
+             */
+            if (event.getSource() == radioButton2) {
+                // De bedoeling is dat deze een output teruggeeft in de tekstarea's
+                // Hierin zouden de virussen gesorteerd op het aantals host die ze hebben staan. 
+            }
         }
-    }
+    
 }
