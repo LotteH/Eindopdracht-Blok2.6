@@ -219,27 +219,18 @@ public class VirusGUI extends JFrame implements ActionListener {
             VirusLogica.sortVirusIDArrays(virusLijstArea1, virusLijstArea2);
             VirusLogica.fillArea1(virusLijstArea1);
             VirusLogica.fillArea2(virusLijstArea2);
-            HashSet<Integer> hsVergelijkVirusID = VirusLogica.compareVirusID();
+            HashSet<Virus> hsVergelijkVirusID = VirusLogica.compareVirusID();
             Virus[] aVergelijkVirusID = VirusLogica.sortedVergelijkVirusID(hsVergelijkVirusID);
             VirusLogica.fillVergelijkArea(vergelijkArea, aVergelijkVirusID);
         }
 
         /**
          * Met radioButton 2 kan er gesorteerd worden op aantal hosts, er wordt van de virussen 
-         * uit de 2 host gekeken hoeveel host's ze hebben. Dde overeenkomt wordt weergegeven.
+         * uit de 2 host gekeken hoeveel host's ze hebben. Deze functie is nog niet af.
          */
         if (event.getSource() == radioButton2) {
-            //VirusLogica.makeVirusIDArrays(hostidbox1, hostidbox2, viruslijst1area, viruslijst2area);
-            //VirusLogica.sortVirusIDArrays(hostidbox1, hostidbox2, viruslijst1area, viruslijst2area);String hostid1 = VirusLogica.returnHost1(hostidbox1);
-            //String hostid2 = VirusLogica.returnHost2(hostidbox2);
-
-            //HashSet virussenid1 = VirusLogica.returnVirusIDLijst1(hostid1, maphostnaarvirussen, viruslijst1area);
-            //HashSet virussenid2 = VirusLogica.returnVirusIDLijst2(hostid2, maphostnaarvirussen, viruslijst2area);
-
-            //VirusLogica.returnVirusHostLijst1(virussenid1, mapvirusidnaarhost, viruslijst1area);
-            //VirusLogica.returnVirusHostLijst2(virussenid2, mapvirusidnaarhost, viruslijst2area);
-
-            //VirusLogica.returnVirusIDOvereenkomst(virussenid1, virussenid2, vergelijkarea);
+            // De bedoeling is dat deze een output teruggeeft in de tekstarea's
+            // Hierin staan de virussen gesorteerd op het aantals host die ze hebben. 
         }
     }
 }
