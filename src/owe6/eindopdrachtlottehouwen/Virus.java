@@ -109,7 +109,7 @@ public class Virus {// implements Comparable {
         this.host_id = host_id;
     }
 
-    /** 
+    /**
      * hostnaam getter.
      *
      * @return hostnaam
@@ -117,8 +117,8 @@ public class Virus {// implements Comparable {
     public String getHostnaam() {
         return hostnaam;
     }
-    
-     /**
+
+    /**
      * hostnaam setter.
      *
      * @param hostnaam
@@ -127,11 +127,10 @@ public class Virus {// implements Comparable {
         this.hostnaam = hostnaam;
     }
 
-    /** 
-     * Pakt 2 virusobjecten, kijkt vervolgens naar de virusid's en sorteerd de 
+    /**
+     * Pakt 2 virusobjecten, kijkt vervolgens naar de virusid's en sorteerd de
      * getallen van klein naar groot zodat de lijsten gesorteerd terugkomen.
      */
-    
     public static Comparator<Virus> VirusIDComparator = new Comparator<Virus>() {    //Huub
 
         @Override
@@ -143,27 +142,5 @@ public class Virus {// implements Comparable {
             return virID1.compareTo(virID2);
 
         }
-
     };
-
-    /*
-    @Override
-    public int compareTo(Object o) {
-         if (o instanceof Virus) {
-            Virus that = (Virus) o;
-            switch (sorteerMethode) {
-                case 0:
-                    return this.virus_id - that.virus_id;
-                case 1:
-                    return this.virusclasse.compareTo(that.virusclasse);
-                case 2:
-                    return this.hostSet.size() - that.hostSet.size();
-                default:
-                    return 0;
-            }
-        }
-        return 0;
-    }
-     
-     */
 }
